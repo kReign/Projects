@@ -14,8 +14,11 @@ function Camera.Update(dt)
 	Camera.position.x = Camera.position.x + (Camera.target.x - Camera.position.x) * Camera.lerp_amount
 	Camera.position.y = Camera.position.y + (Camera.target.y - Camera.position.y) * Camera.lerp_amount
 	
-	Camera.position.x = Camera.position.x - love.window.getWidth()/2
-	Camera.position.y = Camera.position.y - love.window.getHeight()/2
+	Camera.position.x = Camera.position.x - (love.window.getWidth()/tilesize)/2
+	Camera.position.y = Camera.position.y - (love.window.getHeight()/tilesize)/2
+	
+	Camera.position.x = math.max(0, Camera.position.x)
+	Camera.position.y = math.max(0, Camera.position.y)
 end
 
 function Camera:SetTarget(x, y)

@@ -1,21 +1,31 @@
 require "camera"
 require "map"
 
-tilesize = love.window.getWidth()/40
---tilesize = love.window.getWidth()/24
+tilesize = love.window.getWidth()/72
+--tilesize = love.window.getWidth()/48
 
-height = 255
-width = 255
+height = 50
+width = 90
+
+mouse = 0
+
+--function love.mousepressed(x, y, button)
+--	if button == "wu" then
+--		mouse = mouse + 1
+--		tilesize = tilesize * 1.2
+--	elseif button == "wd" then
+--		mouse = mouse - 1
+--		tilesize = tilesize / 1.2
+--	end
+--end
 
 function love.load()
-	love.window.setMode(800, 600, {vsync = false})
+	love.window.setMode(1280, 720, {vsync = false})
 	
 	Map:Generate(width, height)
 	
 	song = love.audio.newSource("smb3.mp3")
 	--love.audio.play(song)
-	
-	tree = love.graphics.newImage("assets/tree.png")
 	
 	grass = {0, 181, 51, 255}
 	hill = {0, 156, 5, 255}
@@ -24,23 +34,24 @@ function love.load()
 	beach = {255, 242, 184, 255}
 	mountain = {163, 163, 163, 255}
 		
-	cameraspeed = 2
-	x, y = math.floor(love.window.getWidth()/2), math.floor(love.window.getHeight()/2)
+	cameraspeed = 1
+	mouse = 0
+	x, y = 58, 30
 end
 
 function love.update(dt)
-	if love.keyboard.isDown('left') then x = x - cameraspeed*dt end
-	if love.keyboard.isDown('right') then x = x + cameraspeed*dt end
-	if love.keyboard.isDown('up') then y = y - cameraspeed*dt end
-	if love.keyboard.isDown('down') then y = y + cameraspeed*dt end
+	if love.keyboard.isDown('left') then x = x - 1 end
+	if love.keyboard.isDown('right') then x = x + 1 end
+	if love.keyboard.isDown('up') then y = y - 1 end
+	if love.keyboard.isDown('down') then y = y + 1 end
 	
 	if love.keyboard.isDown('r') then Map:Generate(width, height) end
 	
-	x = math.min(math.max(0, x), love.window.getWidth())
-	y = math.min(math.max(0, y), love.window.getHeight())
+	x = math.min(math.max(0, x), width)
+	y = math.min(math.max(0, y), height)
 	
-	Camera:SetTarget(x, y)
-	Camera.Update(dt)
+	--Camera:SetTarget(x, y)
+	--Camera.Update(dt)
 	
 end
 
@@ -61,14 +72,14 @@ function love.draw()
 	end
 	
 	love.graphics.setColor(255, 0, 0, 255)
-	love.graphics.rectangle("fill", x - Camera.position.x, y - Camera.position.y, tilesize, tilesize)
+	love.graphics.rectangle("fill", (x - Camera.position.x)*tilesize, (y - Camera.position.y)*tilesize, tilesize, tilesize)
 	
 	love.graphics.setColor(255,255,255,255)
-	love.graphics.print('1', 0, 0)
+	love.graphics.print(Camera.position.x .. " " .. x, 0, 0)
 	love.graphics.print('2', 0, 16)
 	
-	love.graphics.setColor(255,255,255,50)
+	love.graphics.setColor(255,255,255,200)
 	local x, y = love.mouse.getPosition()
-    love.graphics.rectangle("fill", math.floor((x - tilesize/2)), math.floor((y - tilesize/2)), tilesize, tilesize)
+    love.graphics.rectangle("fill", math.floor(x/tilesize)*tilesize, math.floor(y/tilesize)*tilesize, tilesize, tilesize)
 	
 end

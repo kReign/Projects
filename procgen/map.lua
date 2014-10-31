@@ -20,3 +20,5 @@ function Map:Generate(width, height)
 		end
 	end
 end
+
+--Try not dividing by 255 here and multiplying by 128 at the perlin function?
